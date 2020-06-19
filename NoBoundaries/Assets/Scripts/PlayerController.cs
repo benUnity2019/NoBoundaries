@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetButtonDown("PlaceTower"))
+        if (Input.GetButtonDown("PlaceTower"))
         {
             GameObject newTower = Instantiate(towerPrefab);
             newTower.transform.position = transform.position;

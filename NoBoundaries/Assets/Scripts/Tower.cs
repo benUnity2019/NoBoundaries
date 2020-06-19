@@ -6,21 +6,28 @@ public class Tower : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Transform gun;
-    [SerializeField] Weapon weaponData;
+    [SerializeField] Weapon startingWeaponData;
     [SerializeField] Projectile projectilePrefab;
 
     [Header("Settings")]
     [SerializeField] Vector2 gunExit;
+    [SerializeField] WeaponData UpgradeAmount;
 
     [Header("Data")]
     [SerializeField] Team team;
     Collider2D[] enemiesNearMe = new Collider2D[10];
     int enemyCount = 0;
     float lastFireTime = float.MinValue;
+    [SerializeField, ReadOnly] WeaponData weaponData;
 
     Vector2 currentDirection = Vector3.zero;
 
     AIController nearestEnemy = null;
+
+    private void Start()
+    {
+        weaponData = startingWeaponData.Data;
+    }
 
     private void Update()
     {
@@ -28,10 +35,11 @@ public class Tower : MonoBehaviour
         Fire();
     }
 
+
     void Fire()
     {
         if (nearestEnemy &&
-            Time.time - lastFireTime > weaponData.Cooldown)
+            Time.time - lastFireTime > weaponData.cooldown)
         {
             Projectile projectile = Instantiate(projectilePrefab);
             projectile.transform.position = transform.TransformPoint(gunExit);//Get gun exit position in global space
@@ -43,7 +51,7 @@ public class Tower : MonoBehaviour
 
     void Aim()
     {
-        enemyCount = Physics2D.OverlapCircleNonAlloc(transform.position, weaponData.Range, enemiesNearMe);
+        enemyCount = Physics2D.OverlapCircleNonAlloc(transform.position, weaponData.range, enemiesNearMe);
         float nearestEnemySqrDist = float.MaxValue;
         nearestEnemy = null;
         for (int i = 0; i < enemyCount; ++i)
@@ -66,6 +74,16 @@ public class Tower : MonoBehaviour
             transform.eulerAngles = new Vector3(0.0f, 0.0f, Mathf.Atan2(vecDif.y, vecDif.x) * Mathf.Rad2Deg);
             currentDirection = vecDif;
         }
+    }
+
+    private void OnMouseDown()
+    {
+        Upgrade();
+    }
+
+    void Upgrade()
+    {
+        weaponData += UpgradeAmount;
     }
 
 #if UNITY_EDITOR

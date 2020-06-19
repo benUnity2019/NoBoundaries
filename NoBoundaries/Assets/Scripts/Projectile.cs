@@ -7,19 +7,19 @@ public class Projectile : MonoBehaviour
     [SerializeField] new SpriteRenderer renderer;
     [SerializeField] new Rigidbody2D rigidbody;
 
-    Weapon data;
-    public Weapon Data { get => data; set => data = value; }
+    WeaponData data;
+    public WeaponData Data { get => data; set => data = value; }
 
     Team team;
 
-    public void Init(Weapon data, Vector2 direction, Team team)
+    public void Init(WeaponData data, Vector2 direction, Team team)
     {
         if (direction.sqrMagnitude > 0.0f)
         {
             this.team = team;
             this.data = data;
-            renderer.sprite = data.ProjectileSprite;
-            rigidbody.velocity = data.ProjectileSpeed * direction.normalized;
+            renderer.sprite = data.projectileSprite;
+            rigidbody.velocity = data.projectileSpeed * direction.normalized;
         }
         else
         {
@@ -30,15 +30,15 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.GetComponent<CharacterController>().Team != team)
+        if (collision.GetComponent<CharacterController>().Team != team)
         {
             //Do impact damage
             ApplyDamage(collision.gameObject);
 
             //Do area of effect
-            if (data.AreaOfEffect > 0.0f)
+            if (data.areaOfEffect > 0.0f)
             {
-                Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, data.AreaOfEffect);
+                Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, data.areaOfEffect);
                 for (int i = 0; i < cols.Length; i++)
                 {
                     ApplyDamage(cols[i].gameObject);
@@ -54,11 +54,11 @@ public class Projectile : MonoBehaviour
         HealthComponent health = gameObject.GetComponent<HealthComponent>();
         if (health)
         {
-            health.ChangeHealthBy(-data.Damage);
+            health.ChangeHealthBy(-data.damage);
 
-            if (data.DamageOverTime > 0.0f)
+            if (data.damageOverTime > 0.0f)
             {
-                health.AddDamageOverTime(data.DamageOverTime, data.DamageOverTimeDurration);
+                health.AddDamageOverTime(data.damageOverTime, data.damageOverTimeDurration);
             }
         }
     }

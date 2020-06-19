@@ -2,36 +2,60 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct WeaponData
+{
+    [Header("Display")]
+    public Sprite icon;
+    public Sprite projectileSprite;
+
+    [Header("Damage")]
+    public float damage;
+    public float damageOverTime;
+    public float damageOverTimeDurration;
+    public float areaOfEffect;
+
+    [Header("Speed")]
+    public float cooldown;
+    public float projectileSpeed;
+
+    [Header("Distance")]
+    public float reach;
+    public float range;
+
+    static public WeaponData operator +(WeaponData lhs, WeaponData rhs)
+    {
+        return new WeaponData()
+        {
+            icon = lhs.icon,
+            projectileSprite = lhs.projectileSprite,
+            damage = lhs.damage + rhs.damage,
+            damageOverTime = lhs.damageOverTime + rhs.damageOverTime,
+            damageOverTimeDurration = lhs.damageOverTimeDurration + rhs.damageOverTimeDurration,
+            areaOfEffect = lhs.areaOfEffect + rhs.areaOfEffect,
+            cooldown = lhs.cooldown + rhs.cooldown,
+            projectileSpeed = lhs.projectileSpeed + rhs.projectileSpeed,
+            reach = lhs.reach + rhs.reach,
+            range = lhs.range + rhs.range
+        };
+    }
+}
+
 [CreateAssetMenu(fileName = "Weapon", menuName = "Weapon")]
 public class Weapon : ScriptableObject
 {
-    [Header("Display")]
-    [SerializeField] Sprite icon;
-    [SerializeField] Sprite projectileSprite;
-
-    [Header("Damage")]
-    [SerializeField] float damage;
-    [SerializeField] float damageOverTime;
-    [SerializeField] float damageOverTimeDurration;
-    [SerializeField] float areaOfEffect;
-
-    [Header("Speed")]
-    [SerializeField] float cooldown;
-    [SerializeField] float projectileSpeed;
-
-    [Header("Distance")]
-    [SerializeField] float reach;
-    [SerializeField] float range;
+    [SerializeField] WeaponData data;
 
     //Interface
-    public Sprite Icon { get => icon; }
-    public Sprite ProjectileSprite { get => projectileSprite; }
-    public float Damage { get => damage; }
-    public float DamageOverTime { get => damageOverTime; }
-    public float DamageOverTimeDurration { get => damageOverTimeDurration; }
-    public float AreaOfEffect { get => areaOfEffect; }
-    public float Cooldown { get => cooldown; }
-    public float ProjectileSpeed { get => projectileSpeed; }
-    public float Reach { get => reach; }
-    public float Range { get => range; }
+    public Sprite Icon { get => Data.icon; }
+    public Sprite ProjectileSprite { get => Data.projectileSprite; }
+    public float Damage { get => Data.damage; }
+    public float DamageOverTime { get => Data.damageOverTime; }
+    public float DamageOverTimeDurration { get => Data.damageOverTimeDurration; }
+    public float AreaOfEffect { get => Data.areaOfEffect; }
+    public float Cooldown { get => Data.cooldown; }
+    public float ProjectileSpeed { get => Data.projectileSpeed; }
+    public float Reach { get => Data.reach; }
+    public float Range { get => Data.range; }
+    public WeaponData Data { get => data; }
 }
