@@ -3,14 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+struct DamageOverTime
+{
+    public float damagePerTick;
+    public float timeLeft;
+}
+
 public class Damage : MonoBehaviour
 {
+    // Dictionary.key = interaction between damage component and a health component
+    // Dictionary.value = time interaction occured
+    // This is used to ensure that damage does not occur faster that cooldown between interactions, but multiple cooldowns can be applied to the same damage component
+    // For example a fire will be able to hurt 2 entities simultaniosuly without having to cooldown in between entities. But it will still cool down inbetween iterations.
+    static Dictionary<Tuple<HealthComponent, Damage>, float> lastDamageTimes = new Dictionary<Tuple<HealthComponent, Damage>, float>();
+
     //value 1 = object, value 2 = time of last damage to object
     List<Tuple<HealthComponent, float>> currentObjsInMe = new List<Tuple<HealthComponent, float>>();
 
     [SerializeField] float damage;
     [SerializeField] bool canDoContinuousDamage;
-    [SerializeField] float damageRate;
+    [SerializeField] float damageCooldown;
+
+    public float DamageValue { get => damage; set => damage = value; }
+    public bool CanDoContinuousDamage { get => canDoContinuousDamage; set => canDoContinuousDamage = value; }
+    public float DamageCooldown { get => damageCooldown; set => damageCooldown = value; }
 
     bool AddObjectToObjList(HealthComponent obj)
     {
@@ -37,14 +53,14 @@ public class Damage : MonoBehaviour
 
     private void Update()
     {
-        if (canDoContinuousDamage)
+        if (CanDoContinuousDamage)
         {
             float currentTime = Time.time;
             for (int i = 0; i < currentObjsInMe.Count; i++)
             {
-                if (currentTime - currentObjsInMe[i].Item2 > damageRate)
+                if (currentTime - currentObjsInMe[i].Item2 > DamageCooldown)
                 {
-                    currentObjsInMe[i].Item1.Health -= damage;
+                    currentObjsInMe[i].Item1.ChangeHealthBy(-damage);
                 }
             }
         }
@@ -54,18 +70,43 @@ public class Damage : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         HealthComponent health = collision.GetComponent<HealthComponent>();
-        if (health && AddObjectToObjList(health))
-        {
-            health.Health -= damage;
-        }
+        if (health)
+            HandleCollision(health);
+
+        Debug.Log("asd");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         HealthComponent health = collision.transform.GetComponent<HealthComponent>();
-        if (health && AddObjectToObjList(health))
+        if (health)
+            HandleCollision(health);
+
+        Debug.Log("asd");
+    }
+
+    void HandleCollision(HealthComponent health)
+    {
+        if (AddObjectToObjList(health))
         {
-            health.Health -= damage;
+            Tuple<HealthComponent, Damage> interaction = new Tuple<HealthComponent, Damage>(health, this);
+
+            // If this damage component has hurt this health component in the past
+            if (lastDamageTimes.ContainsKey(interaction))
+            {
+                // And if time past since interaction is longer than cooldown
+                if (Time.time - lastDamageTimes[interaction] > damageCooldown)
+                {
+                    //Damage health object and add interaction time
+                    health.ChangeHealthBy(-damage);
+                    lastDamageTimes[interaction] = Time.time;
+                }
+            }
+            else // else just damage the object and add interaction time
+            {
+                health.ChangeHealthBy(-damage);
+                lastDamageTimes[interaction] = Time.time;
+            }
         }
     }
 

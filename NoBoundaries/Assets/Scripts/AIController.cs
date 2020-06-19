@@ -7,6 +7,7 @@ public class AIController : MonoBehaviour
 {
     [Header("References")]
     CharacterController characterController;
+    Damage damage;
 
     [Header("References")]
     [SerializeField] float viewDistance;
@@ -18,6 +19,11 @@ public class AIController : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+
+        damage = gameObject.AddComponent<Damage>();
+        damage.DamageValue = characterController.CurrentWeapon.Damage;//TODO: Update when currentWeapon updates
+        damage.DamageCooldown = characterController.CurrentWeapon.Cooldown;//TODO: Update when currentWeapon updates
+        damage.CanDoContinuousDamage = true;
     }
 
     void FixedUpdate()

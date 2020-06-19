@@ -6,6 +6,7 @@ public class CharacterController : MonoBehaviour
 {
     [Header("References")]
     new Rigidbody2D rigidbody;
+    [SerializeField] GameObject projectilePrefab;
 
     [Header("Settings")]
     [SerializeField] float maxSpeed;
@@ -14,6 +15,11 @@ public class CharacterController : MonoBehaviour
 
     [Header("Data")]
     Vector2 velocity = Vector2.zero;
+    [SerializeField] Weapon currentWeapon;
+    [SerializeField] Team team;
+
+    public Team Team { get => team; }
+    public Weapon CurrentWeapon { get => currentWeapon; set => currentWeapon = value; }
 
     private void Awake()
     {
@@ -41,6 +47,11 @@ public class CharacterController : MonoBehaviour
             velocity.y = Mathf.MoveTowards(velocity.y, move.y * maxSpeed, acceleration * deltaTime);
 
         velocity = Vector2.ClampMagnitude(velocity, maxSpeed);
+    }
+
+    public void UseWeapon()
+    {
+
     }
 
     private void FixedUpdate()

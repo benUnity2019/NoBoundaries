@@ -7,12 +7,22 @@ public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     CharacterController characterController;
+    [SerializeField] GameObject towerPrefab;
 
     Vector2 move = Vector2.zero;
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+    }
+
+    private void Update()
+    {
+        if(Input.GetButtonDown("PlaceTower"))
+        {
+            GameObject newTower = Instantiate(towerPrefab);
+            newTower.transform.position = transform.position;
+        }
     }
 
     void FixedUpdate()
