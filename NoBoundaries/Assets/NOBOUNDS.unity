@@ -138,8 +138,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Player
       value: 
-      objectReference: {fileID: 4569775811562797415, guid: 58476721db691a04585ba05bde6319bd,
-        type: 3}
+      objectReference: {fileID: 878851130}
     - target: {fileID: 3021304354623020796, guid: 17d902e823c0dd04cb00b0378c04657d,
         type: 3}
       propertyPath: enemy
@@ -208,6 +207,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17d902e823c0dd04cb00b0378c04657d, type: 3}
+--- !u!4 &878851130 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6537443775701408808, guid: 9e7299b19d0769e4ab766fced00bf10b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2135875561}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &937950380
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,7 +422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 041384a0d0fb70444b6674e6a3ed6675, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 878851130}
   cameraDistance: 0
 --- !u!1001 &1160450545
 PrefabInstance:
@@ -779,6 +784,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6537443775701408810, guid: 9e7299b19d0769e4ab766fced00bf10b,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6537443775701408815, guid: 9e7299b19d0769e4ab766fced00bf10b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cfb7b2e4935f4074a968218d9e75f64d,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e7299b19d0769e4ab766fced00bf10b, type: 3}
 --- !u!1001 &3021304355554539595
@@ -792,8 +808,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Player
       value: 
-      objectReference: {fileID: 4569775811562797415, guid: 58476721db691a04585ba05bde6319bd,
-        type: 3}
+      objectReference: {fileID: 878851130}
     - target: {fileID: 3021304354623020796, guid: 17d902e823c0dd04cb00b0378c04657d,
         type: 3}
       propertyPath: enemy
