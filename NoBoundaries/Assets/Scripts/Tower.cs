@@ -15,7 +15,8 @@ public class Tower : MonoBehaviour
 
     [Header("Data")]
     [SerializeField] Team team;
-    Collider2D[] enemiesNearMe = new Collider2D[10];
+    Collider2D[] enemiesWithinRange = new Collider2D[10];
+    Collider2D[] enemiesWithinAOE = new Collider2D[10];
     int enemyCount = 0;
     float lastFireTime = float.MinValue;
     [SerializeField, ReadOnly] WeaponData weaponData;
@@ -32,14 +33,15 @@ public class Tower : MonoBehaviour
     private void Update()
     {
         Aim();
-        Fire();
+
+        if (Time.time - lastFireTime > weaponData.cooldown)
+            Fire();
     }
 
 
     void Fire()
     {
-        if (nearestEnemy &&
-            Time.time - lastFireTime > weaponData.cooldown)
+        if (nearestEnemy)
         {
             Projectile projectile = Instantiate(projectilePrefab);
             projectile.transform.position = transform.TransformPoint(gunExit);//Get gun exit position in global space
@@ -47,16 +49,31 @@ public class Tower : MonoBehaviour
 
             lastFireTime = Time.time;
         }
+        else if (weaponData.areaOfEffect > 0.0f)
+        {
+            int count = Physics2D.OverlapCircleNonAlloc(transform.position, weaponData.range, enemiesWithinAOE);
+            for (int i = 0; i < count; ++i)
+            {
+                //Get enemy distance percent of aoe range
+                float percent = Vector2.Distance(transform.position, enemiesWithinAOE[i].ClosestPoint(transform.position)) / weaponData.areaOfEffect;
+
+                //Hurt enemies within aoe scaled by distance
+                enemiesWithinAOE[i].GetComponent<HealthComponent>().ChangeHealthBy(-weaponData.damage * percent);
+
+                Rigidbody2D rigidbody = enemiesWithinAOE[i].GetComponent<Rigidbody2D>();
+                rigidbody.AddForce((enemiesWithinAOE[i].transform.position - transform.position).normalized * percent * weaponData.force, ForceMode2D.Impulse);
+            }
+        }
     }
 
     void Aim()
     {
-        enemyCount = Physics2D.OverlapCircleNonAlloc(transform.position, weaponData.range, enemiesNearMe);
+        enemyCount = Physics2D.OverlapCircleNonAlloc(transform.position, weaponData.range, enemiesWithinRange);
         float nearestEnemySqrDist = float.MaxValue;
         nearestEnemy = null;
         for (int i = 0; i < enemyCount; ++i)
         {
-            AIController ai = enemiesNearMe[i].GetComponent<AIController>();
+            AIController ai = enemiesWithinRange[i].GetComponent<AIController>();
             if (ai)
             {
                 float sqrDist = Vector2.SqrMagnitude(transform.position - ai.transform.position);

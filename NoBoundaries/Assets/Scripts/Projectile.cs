@@ -7,8 +7,8 @@ public class Projectile : MonoBehaviour
     [SerializeField] new SpriteRenderer renderer;
     [SerializeField] new Rigidbody2D rigidbody;
 
-    WeaponData data;
-    public WeaponData Data { get => data; set => data = value; }
+    WeaponData weaponData;
+    public WeaponData Data { get => weaponData; set => weaponData = value; }
 
     Team team;
 
@@ -17,7 +17,7 @@ public class Projectile : MonoBehaviour
         if (direction.sqrMagnitude > 0.0f)
         {
             this.team = team;
-            this.data = data;
+            this.weaponData = data;
             renderer.sprite = data.projectileSprite;
             rigidbody.velocity = data.projectileSpeed * direction.normalized;
         }
@@ -33,32 +33,39 @@ public class Projectile : MonoBehaviour
         if (collision.GetComponent<CharacterController>().Team != team)
         {
             //Do impact damage
-            ApplyDamage(collision.gameObject);
+            ApplyDamage(collision.gameObject, 1.0f);
 
             //Do area of effect
-            if (data.areaOfEffect > 0.0f)
+            if (weaponData.areaOfEffect > 0.0f)
             {
-                Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, data.areaOfEffect);
+                Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, weaponData.areaOfEffect);
                 for (int i = 0; i < cols.Length; i++)
                 {
-                    ApplyDamage(cols[i].gameObject);
+                    //Get enemy distance percent of aoe range
+                    float percent = Vector2.Distance(transform.position, cols[i].ClosestPoint(transform.position)) / weaponData.areaOfEffect;
+
+                    ApplyDamage(cols[i].gameObject, percent);
                 }
             }
-
-
         }
     }
 
-    public void ApplyDamage(GameObject gameObject)
+    public void ApplyDamage(GameObject gameObject, float percent)
     {
+        //Add force
+        Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
+        if (rigidbody)
+            rigidbody.AddForce(rigidbody.velocity.normalized * percent * weaponData.force, ForceMode2D.Impulse);
+
+        //Hurt
         HealthComponent health = gameObject.GetComponent<HealthComponent>();
         if (health)
         {
-            health.ChangeHealthBy(-data.damage);
+            health.ChangeHealthBy(-weaponData.damage * percent);
 
-            if (data.damageOverTime > 0.0f)
+            if (weaponData.damageOverTime > 0.0f)
             {
-                health.AddDamageOverTime(data.damageOverTime, data.damageOverTimeDurration);
+                health.AddDamageOverTime(weaponData.damageOverTime, weaponData.damageOverTimeDurration);
             }
         }
     }
