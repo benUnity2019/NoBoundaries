@@ -15,15 +15,15 @@ public class Tower : MonoBehaviour
 
     [Header("Data")]
     [SerializeField] Team team;
-    Collider2D[] enemiesWithinRange = new Collider2D[10];
-    Collider2D[] enemiesWithinAOE = new Collider2D[10];
-    int enemyCount = 0;
+    Collider2D[] targetsWithinRange = new Collider2D[10];
+    Collider2D[] targetsWithinAOE = new Collider2D[10];
+    int targetCount = 0;
     float lastFireTime = float.MinValue;
     [SerializeField, ReadOnly] WeaponData weaponData;
 
     Vector2 currentDirection = Vector3.zero;
 
-    AIController nearestEnemy = null;
+    AIController nearestTarget = null;
 
     private void Start()
     {
@@ -41,7 +41,7 @@ public class Tower : MonoBehaviour
 
     void Fire()
     {
-        if (nearestEnemy)
+        if (nearestTarget)
         {
             Projectile projectile = Instantiate(projectilePrefab);
             projectile.transform.position = transform.TransformPoint(gunExit);//Get gun exit position in global space
@@ -51,43 +51,43 @@ public class Tower : MonoBehaviour
         }
         else if (weaponData.areaOfEffect > 0.0f)
         {
-            int count = Physics2D.OverlapCircleNonAlloc(transform.position, weaponData.range, enemiesWithinAOE);
+            int count = Physics2D.OverlapCircleNonAlloc(transform.position, weaponData.range, targetsWithinAOE);
             for (int i = 0; i < count; ++i)
             {
-                //Get enemy distance percent of aoe range
-                float percent = Vector2.Distance(transform.position, enemiesWithinAOE[i].ClosestPoint(transform.position)) / weaponData.areaOfEffect;
+                //Get target distance percent of aoe range
+                float percent = Vector2.Distance(transform.position, targetsWithinAOE[i].ClosestPoint(transform.position)) / weaponData.areaOfEffect;
 
-                //Hurt enemies within aoe scaled by distance
-                enemiesWithinAOE[i].GetComponent<HealthComponent>().ChangeHealthBy(-weaponData.damage * percent);
+                //Hurt targets within aoe scaled by distance
+                targetsWithinAOE[i].GetComponent<HealthComponent>().ChangeHealthBy(-weaponData.damage * percent);
 
-                Rigidbody2D rigidbody = enemiesWithinAOE[i].GetComponent<Rigidbody2D>();
-                rigidbody.AddForce((enemiesWithinAOE[i].transform.position - transform.position).normalized * percent * weaponData.force, ForceMode2D.Impulse);
+                Rigidbody2D rigidbody = targetsWithinAOE[i].GetComponent<Rigidbody2D>();
+                rigidbody.AddForce((targetsWithinAOE[i].transform.position - transform.position).normalized * percent * weaponData.force, ForceMode2D.Impulse);
             }
         }
     }
 
     void Aim()
     {
-        enemyCount = Physics2D.OverlapCircleNonAlloc(transform.position, weaponData.range, enemiesWithinRange);
-        float nearestEnemySqrDist = float.MaxValue;
-        nearestEnemy = null;
-        for (int i = 0; i < enemyCount; ++i)
+        targetCount = Physics2D.OverlapCircleNonAlloc(transform.position, weaponData.range, targetsWithinRange);
+        float nearestTargetSqrDist = float.MaxValue;
+        nearestTarget = null;
+        for (int i = 0; i < targetCount; ++i)
         {
-            AIController ai = enemiesWithinRange[i].GetComponent<AIController>();
+            AIController ai = targetsWithinRange[i].GetComponent<AIController>();
             if (ai)
             {
                 float sqrDist = Vector2.SqrMagnitude(transform.position - ai.transform.position);
-                if (sqrDist < nearestEnemySqrDist)
+                if (sqrDist < nearestTargetSqrDist)
                 {
-                    nearestEnemySqrDist = sqrDist;
-                    nearestEnemy = ai;
+                    nearestTargetSqrDist = sqrDist;
+                    nearestTarget = ai;
                 }
             }
         }
 
-        if (nearestEnemy)
+        if (nearestTarget)
         {
-            Vector2 vecDif = nearestEnemy.transform.position - transform.position;
+            Vector2 vecDif = nearestTarget.transform.position - transform.position;
             transform.eulerAngles = new Vector3(0.0f, 0.0f, Mathf.Atan2(vecDif.y, vecDif.x) * Mathf.Rad2Deg);
             currentDirection = vecDif;
         }

@@ -61,6 +61,7 @@ public class Damage : MonoBehaviour
                 if (currentTime - currentObjsInMe[i].Item2 > DamageCooldown)
                 {
                     currentObjsInMe[i].Item1.ChangeHealthBy(-damage);
+                    currentObjsInMe[i] = new Tuple<HealthComponent, float>(currentObjsInMe[i].Item1, Time.time);
                 }
             }
         }
@@ -72,8 +73,6 @@ public class Damage : MonoBehaviour
         HealthComponent health = collision.GetComponent<HealthComponent>();
         if (health)
             HandleCollision(health);
-
-        Debug.Log("asd");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -81,8 +80,6 @@ public class Damage : MonoBehaviour
         HealthComponent health = collision.transform.GetComponent<HealthComponent>();
         if (health)
             HandleCollision(health);
-
-        Debug.Log("asd");
     }
 
     void HandleCollision(HealthComponent health)

@@ -7,6 +7,9 @@ public class CharacterController : MonoBehaviour
     [Header("References")]
     new Rigidbody2D rigidbody;
     [SerializeField] GameObject projectilePrefab;
+    [SerializeField] Animator animator;
+    [SerializeField] Transform weaponHolder;
+    [SerializeField] Damage weapon;
 
     [Header("Settings")]
     [SerializeField] float maxSpeed;
@@ -24,6 +27,9 @@ public class CharacterController : MonoBehaviour
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+
+        weapon.transform.localScale = Vector3.one * currentWeapon.Reach;
+        weapon.DamageValue = currentWeapon.Damage;
     }
 
     /// <summary>
@@ -49,9 +55,20 @@ public class CharacterController : MonoBehaviour
         velocity = Vector2.ClampMagnitude(velocity, maxSpeed);
     }
 
+    public void Aim(float direction)
+    {
+        weaponHolder.transform.eulerAngles = new Vector3(0.0f, 0.0f, direction);
+    }
+
+    public void Aim(Vector2 direction)
+    {
+        if (direction.x != 0.0f || direction.y != 0.0f)
+            Aim(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90.0f);
+    }
+
     public void UseWeapon()
     {
-
+        animator.SetTrigger("Attack");
     }
 
     private void FixedUpdate()

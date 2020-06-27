@@ -7,6 +7,8 @@ public class HealthComponent : MonoBehaviour
     float tickLength = 0.1f;//TODO: move to settings or time manager
 
     [SerializeField] float health;
+    [SerializeField] float maxHealth;
+    [SerializeField] Fillbar fillbar;
 
     List<DamageOverTime> currentDamageOverTime = new List<DamageOverTime>();
 
@@ -32,6 +34,9 @@ public class HealthComponent : MonoBehaviour
             {
                 BroadcastMessage("OnDead", health, SendMessageOptions.DontRequireReceiver);
             }
+
+            if (fillbar)
+                fillbar.Value = health / maxHealth;
         }
     }
 

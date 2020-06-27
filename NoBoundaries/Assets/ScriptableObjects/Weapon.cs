@@ -71,5 +71,4 @@ public class Weapon : ScriptableObject
     public float Range { get => Data.range; }
     public float Force { get => Data.force; }
     public WeaponData Data { get => data; }
-
 }
