@@ -30,6 +30,7 @@ public class CharacterController : MonoBehaviour
 
         weapon.transform.localScale = Vector3.one * currentWeapon.Reach;
         weapon.DamageValue = currentWeapon.Damage;
+        weapon.DamageCooldown = CurrentWeapon.Cooldown;
     }
 
     /// <summary>

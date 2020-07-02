@@ -7,7 +7,6 @@ public class AIController : MonoBehaviour
 {
     [Header("References")]
     CharacterController characterController;
-    Damage damage;
 
     [Header("References")]
     [SerializeField] float viewDistance;
@@ -16,14 +15,34 @@ public class AIController : MonoBehaviour
 
     Collider2D[] collidersISee = new Collider2D[20];
 
+    Transform currentTarget = null;
+    float squareReachMagnitude;
+
+    float lastAttackTime = float.MinValue;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        squareReachMagnitude = characterController.CurrentWeapon.Reach * characterController.CurrentWeapon.Reach;
+    }
 
-        damage = gameObject.AddComponent<Damage>();
-        damage.DamageValue = characterController.CurrentWeapon.Damage;//TODO: Update when currentWeapon updates
-        damage.DamageCooldown = characterController.CurrentWeapon.Cooldown;//TODO: Update when currentWeapon updates
-        damage.CanDoContinuousDamage = true;
+    private void Update()
+    {
+        if (currentTarget)
+        {
+            Vector2 vec = transform.position - currentTarget.position;
+            if (vec.sqrMagnitude <= squareReachMagnitude)
+            {
+                characterController.Aim(vec.normalized);
+
+                if (Time.time - lastAttackTime > characterController.CurrentWeapon.Cooldown)
+                {
+                    lastAttackTime = Time.time;
+
+                    characterController.UseWeapon();
+                }
+            }
+        }
     }
 
     void FixedUpdate()
@@ -35,7 +54,8 @@ public class AIController : MonoBehaviour
         {
             if (collidersISee[i].GetComponent<PlayerController>())
             {
-                move = (collidersISee[i].transform.position - transform.position).normalized;
+                currentTarget = collidersISee[i].transform;
+                move = (currentTarget.position - transform.position).normalized;
                 break;
             }
         }
