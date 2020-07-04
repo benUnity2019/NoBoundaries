@@ -19,7 +19,7 @@ public class HealthComponent : MonoBehaviour
         {
             float oldHealth = health;
 
-            health = value;
+            health = Mathf.Clamp(value, 0.0f, maxHealth);
 
             if (health < oldHealth)
             {

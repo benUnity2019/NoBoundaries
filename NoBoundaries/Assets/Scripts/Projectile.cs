@@ -20,7 +20,7 @@ public class Projectile : MonoBehaviour
         if (direction.sqrMagnitude > 0.0f)
         {
             this.team = team;
-            this.weaponData = data;
+            weaponData = data;
             renderer.sprite = data.projectileSprite;
             rigidbody.velocity = data.projectileSpeed * direction.normalized;
             this.objectThatShotMe = objectThatShotMe;
