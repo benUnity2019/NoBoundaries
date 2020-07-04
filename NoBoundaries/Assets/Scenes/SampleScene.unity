@@ -532,6 +532,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6085706503159169388, guid: ff3d83a450a0cb9489eddade7a67519f,
+        type: 3}
+      propertyPath: maxSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff3d83a450a0cb9489eddade7a67519f, type: 3}
 --- !u!1001 &4582937037238746848
@@ -770,5 +775,11 @@ PrefabInstance:
       propertyPath: money
       value: 
       objectReference: {fileID: 2004626330}
+    - target: {fileID: 4192256127663396948, guid: d117a16687a6948478a9d90c11b2dc66,
+        type: 3}
+      propertyPath: towerPrefab
+      value: 
+      objectReference: {fileID: 9047690782945079270, guid: 3d7fbbcb649d9d74c9dd990d57fe9eec,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d117a16687a6948478a9d90c11b2dc66, type: 3}

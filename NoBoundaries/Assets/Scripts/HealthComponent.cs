@@ -12,10 +12,10 @@ public class HealthComponent : MonoBehaviour
 
     List<DamageOverTime> currentDamageOverTime = new List<DamageOverTime>();
 
-    float Health
+    public float Health
     {
         get => health;
-        set
+        private set
         {
             float oldHealth = health;
 
@@ -60,6 +60,14 @@ public class HealthComponent : MonoBehaviour
                 continue;
             }
             Health -= dot.damagePerTick;
+
+            DamageEventData damageEvent = new DamageEventData()
+            {
+                attacker = currentDamageOverTime[i].attacker,
+                victim = gameObject,
+                victimsResultingHealth = health
+            };
+            currentDamageOverTime[i].attacker.SendMessage("OnMeHurtingSomeoneElse", damageEvent);
         }
     }
 
@@ -68,8 +76,8 @@ public class HealthComponent : MonoBehaviour
         Health += amount;
     }
 
-    public void AddDamageOverTime(float damagePerTick, float time)
+    public void AddDamageOverTime(float damagePerTick, float time, GameObject attackingObject)
     {
-        currentDamageOverTime.Add(new DamageOverTime() { damagePerTick = damagePerTick, timeLeft = time });
+        currentDamageOverTime.Add(new DamageOverTime() { damagePerTick = damagePerTick, timeLeft = time, attacker = attackingObject });
     }
 }

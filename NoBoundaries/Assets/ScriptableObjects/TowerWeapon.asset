@@ -15,11 +15,14 @@ MonoBehaviour:
   data:
     icon: {fileID: 0}
     projectileSprite: {fileID: 21300000, guid: a62aabf1343261d47a6262605db7e7b3, type: 3}
+    health: 0
+    targets: []
     damage: 5
     damageOverTime: 0
     damageOverTimeDurration: 0
     areaOfEffect: 0
     cooldown: 5
-    projectileSpeed: 20
+    projectileSpeed: 3
     reach: 1
     range: 5
+    force: 0

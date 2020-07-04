@@ -6,13 +6,14 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] new SpriteRenderer renderer;
     [SerializeField] new Rigidbody2D rigidbody;
+    [SerializeField] GameObject objectThatShotMe;
 
     WeaponData weaponData;
     public WeaponData Data { get => weaponData; set => weaponData = value; }
 
     Team team;
 
-    public void Init(WeaponData data, Vector2 direction, Team team)
+    public void Init(WeaponData data, Vector2 direction, Team team, GameObject objectThatShotMe)
     {
         if (direction.sqrMagnitude > 0.0f)
         {
@@ -20,6 +21,7 @@ public class Projectile : MonoBehaviour
             this.weaponData = data;
             renderer.sprite = data.projectileSprite;
             rigidbody.velocity = data.projectileSpeed * direction.normalized;
+            this.objectThatShotMe = objectThatShotMe;
         }
         else
         {
@@ -50,7 +52,13 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void ApplyDamage(GameObject gameObject, float percent)
+    /// <summary>
+    /// Attempts to take health from object
+    /// </summary>
+    /// <param name="gameObject">Object to damage</param>
+    /// <param name="percent">Damage multiplier</param>
+    /// <returns>Returns true if object had health</returns>
+    public bool ApplyDamage(GameObject gameObject, float percent)
     {
         //Add force
         Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
@@ -65,8 +73,19 @@ public class Projectile : MonoBehaviour
 
             if (weaponData.damageOverTime > 0.0f)
             {
-                health.AddDamageOverTime(weaponData.damageOverTime, weaponData.damageOverTimeDurration);
+                health.AddDamageOverTime(weaponData.damageOverTime, weaponData.damageOverTimeDurration, gameObject);
             }
+
+            DamageEventData damageEvent = new DamageEventData()
+            {
+                attacker = this.gameObject,
+                victim = gameObject,
+                victimsResultingHealth = health.Health
+            };
+            objectThatShotMe.SendMessage("OnMeHurtingSomeoneElse", damageEvent);
+
+            return true;
         }
+        return false;
     }
 }

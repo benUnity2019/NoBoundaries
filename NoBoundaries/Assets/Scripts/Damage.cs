@@ -7,6 +7,7 @@ struct DamageOverTime
 {
     public float damagePerTick;
     public float timeLeft;
+    public GameObject attacker;
 }
 
 public class Damage : MonoBehaviour

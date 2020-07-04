@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 9047690782945079267}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.078954, y: 0.078954, z: 0.078954}
   m_Children:
   - {fileID: 9047690784471158820}
   - {fileID: 1810242234}
@@ -135,6 +135,8 @@ MonoBehaviour:
   UpgradeAmount:
     icon: {fileID: 0}
     projectileSprite: {fileID: 0}
+    health: 0
+    targets: []
     damage: 2
     damageOverTime: 1
     damageOverTimeDurration: 1
@@ -143,10 +145,13 @@ MonoBehaviour:
     projectileSpeed: 1
     reach: 0
     range: 1
+    force: 0
   team: 0
   weaponData:
     icon: {fileID: 0}
     projectileSprite: {fileID: 0}
+    health: 0
+    targets: []
     damage: 0
     damageOverTime: 0
     damageOverTimeDurration: 0
@@ -155,6 +160,7 @@ MonoBehaviour:
     projectileSpeed: 0
     reach: 0
     range: 0
+    force: 0
 --- !u!58 &4227308985893709318
 CircleCollider2D:
   m_ObjectHideFlags: 0

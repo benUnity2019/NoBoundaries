@@ -25,6 +25,8 @@ public class Tower : MonoBehaviour
 
     AIController nearestTarget = null;
 
+    GameObject owner;
+
     private void Start()
     {
         weaponData = startingWeaponData.Data;
@@ -38,6 +40,10 @@ public class Tower : MonoBehaviour
             Fire();
     }
 
+    public void Init(GameObject owner)
+    {
+        this.owner = owner;
+    }
 
     void Fire()
     {
@@ -45,7 +51,7 @@ public class Tower : MonoBehaviour
         {
             Projectile projectile = Instantiate(projectilePrefab);
             projectile.transform.position = transform.TransformPoint(gunExit);//Get gun exit position in global space
-            projectile.Init(weaponData, currentDirection, team);
+            projectile.Init(weaponData, currentDirection, team, gameObject);
 
             lastFireTime = Time.time;
         }
@@ -64,6 +70,11 @@ public class Tower : MonoBehaviour
                 rigidbody.AddForce((targetsWithinAOE[i].transform.position - transform.position).normalized * percent * weaponData.force, ForceMode2D.Impulse);
             }
         }
+    }
+
+    void OnMeHurtingSomeoneElse(DamageEventData damageEvent)
+    {
+        owner.SendMessage("OnMeHurtingSomeoneElse", damageEvent);
     }
 
     void Aim()

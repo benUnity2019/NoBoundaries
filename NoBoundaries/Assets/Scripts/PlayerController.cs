@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     CharacterController characterController;
-    [SerializeField] GameObject towerPrefab;
+    [SerializeField] Tower towerPrefab;
     [SerializeField] UICounter money;
 
     Vector2 move = Vector2.zero;
@@ -22,15 +22,22 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("PlaceTower"))
         {
-            GameObject newTower = Instantiate(towerPrefab);
+            Tower newTower = Instantiate(towerPrefab);
             newTower.transform.position = transform.position;
+            newTower.Init(gameObject);
         }
-
-        money.Value = Mathf.FloorToInt(Time.time);
 
         if (Input.GetAxis("Attack") > 0.2f)
         {
             characterController.UseWeapon();
+        }
+    }
+
+    public void OnMeHurtingSomeoneElse(DamageEventData damageEvent)
+    {
+        if (damageEvent.victimsResultingHealth <= 0.0f)
+        {
+            money.Value += 5;
         }
     }
 
