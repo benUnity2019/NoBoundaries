@@ -13,13 +13,14 @@ public struct WeaponData
     public float health;
 
     [Header("Targets")]
-    public string[] targets;
+    public bool targetIsOwnTeam;
 
     [Header("Damage")]
     public float damage;
     public float damageOverTime;
     public float damageOverTimeDurration;
     public float areaOfEffect;
+    public int peirceCount;
 
     [Header("Speed")]
     public float cooldown;
@@ -37,11 +38,12 @@ public struct WeaponData
             icon = lhs.icon,
             projectileSprite = lhs.projectileSprite,
             health = lhs.health + rhs.health,
-            targets = lhs.targets,
+            targetIsOwnTeam = lhs.targetIsOwnTeam,
             damage = lhs.damage + rhs.damage,
             damageOverTime = lhs.damageOverTime + rhs.damageOverTime,
             damageOverTimeDurration = lhs.damageOverTimeDurration + rhs.damageOverTimeDurration,
             areaOfEffect = lhs.areaOfEffect + rhs.areaOfEffect,
+            peirceCount = lhs.peirceCount + rhs.peirceCount,
             cooldown = lhs.cooldown + rhs.cooldown,
             projectileSpeed = lhs.projectileSpeed + rhs.projectileSpeed,
             reach = lhs.reach + rhs.reach,
@@ -60,11 +62,12 @@ public class Weapon : ScriptableObject
     public Sprite Icon { get => Data.icon; }
     public Sprite ProjectileSprite { get => Data.projectileSprite; }
     public float Health { get => Data.health; }
-    public string[] Targets { get => Data.targets; }
+    public bool TargetIsOwnTeam { get => Data.targetIsOwnTeam; }
     public float Damage { get => Data.damage; }
     public float DamageOverTime { get => Data.damageOverTime; }
     public float DamageOverTimeDurration { get => Data.damageOverTimeDurration; }
     public float AreaOfEffect { get => Data.areaOfEffect; }
+    public float PeirceCount { get => Data.peirceCount; }
     public float Cooldown { get => Data.cooldown; }
     public float ProjectileSpeed { get => Data.projectileSpeed; }
     public float Reach { get => Data.reach; }

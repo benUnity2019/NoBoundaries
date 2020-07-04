@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: Tower5Support
   m_EditorClassIdentifier: 
   data:
-    icon: {fileID: 21300000, guid: a62aabf1343261d47a6262605db7e7b3, type: 3}
+    icon: {fileID: 21300000, guid: f200a7391049e79418441126b42d3b83, type: 3}
     projectileSprite: {fileID: 21300000, guid: a62aabf1343261d47a6262605db7e7b3, type: 3}
     health: 9
-    targets:
-    - Player
+    targetIsOwnTeam: 1
     damage: -1
     damageOverTime: 0
     damageOverTimeDurration: 0
     areaOfEffect: 0
-    cooldown: 0
+    peirceCount: 0
+    cooldown: 1
     projectileSpeed: 1
     reach: 0
-    range: 0
+    range: 1
     force: 0

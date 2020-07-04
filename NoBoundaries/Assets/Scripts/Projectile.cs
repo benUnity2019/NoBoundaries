@@ -8,6 +8,8 @@ public class Projectile : MonoBehaviour
     [SerializeField] new Rigidbody2D rigidbody;
     [SerializeField] GameObject objectThatShotMe;
 
+    int peirceCount = 0;
+
     WeaponData weaponData;
     public WeaponData Data { get => weaponData; set => weaponData = value; }
 
@@ -22,6 +24,7 @@ public class Projectile : MonoBehaviour
             renderer.sprite = data.projectileSprite;
             rigidbody.velocity = data.projectileSpeed * direction.normalized;
             this.objectThatShotMe = objectThatShotMe;
+            peirceCount = weaponData.peirceCount;
         }
         else
         {
@@ -32,7 +35,11 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<CharacterController>().Team != team)
+        CharacterController character = collision.GetComponent<CharacterController>();
+
+        if (character &&
+            (weaponData.targetIsOwnTeam && character.Team == team ||
+            !weaponData.targetIsOwnTeam && character.Team != team))
         {
             //Do impact damage
             ApplyDamage(collision.gameObject, 1.0f);
@@ -48,6 +55,13 @@ public class Projectile : MonoBehaviour
 
                     ApplyDamage(cols[i].gameObject, percent);
                 }
+            }
+
+            //Handle pierce
+            peirceCount--;
+            if (peirceCount <= 0)
+            {
+                Destroy(gameObject);
             }
         }
     }

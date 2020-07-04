@@ -24,6 +24,8 @@ public class CharacterController : MonoBehaviour
     public Team Team { get => team; }
     public Weapon CurrentWeapon { get => currentWeapon; set => currentWeapon = value; }
 
+    public Vector2 InteractPosition { get { return weaponHolder.position; } }
+
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();

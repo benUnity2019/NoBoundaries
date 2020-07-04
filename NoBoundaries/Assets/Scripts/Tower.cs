@@ -5,9 +5,8 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] Transform gun;
-    [SerializeField] Weapon startingWeaponData;
     [SerializeField] Projectile projectilePrefab;
+    [SerializeField] new SpriteRenderer renderer;
 
     [Header("Settings")]
     [SerializeField] Vector2 gunExit;
@@ -23,14 +22,9 @@ public class Tower : MonoBehaviour
 
     Vector2 currentDirection = Vector3.zero;
 
-    AIController nearestTarget = null;
+    CharacterController nearestTarget = null;
 
     GameObject owner;
-
-    private void Start()
-    {
-        weaponData = startingWeaponData.Data;
-    }
 
     private void Update()
     {
@@ -40,9 +34,12 @@ public class Tower : MonoBehaviour
             Fire();
     }
 
-    public void Init(GameObject owner)
+    public void Init(GameObject owner, Weapon startingWeapon)
     {
         this.owner = owner;
+
+        weaponData = startingWeapon.Data;
+        renderer.sprite = weaponData.icon;
     }
 
     void Fire()
@@ -84,14 +81,18 @@ public class Tower : MonoBehaviour
         nearestTarget = null;
         for (int i = 0; i < targetCount; ++i)
         {
-            AIController ai = targetsWithinRange[i].GetComponent<AIController>();
-            if (ai)
+            CharacterController target = targetsWithinRange[i].GetComponent<CharacterController>();
+            if (target)
             {
-                float sqrDist = Vector2.SqrMagnitude(transform.position - ai.transform.position);
-                if (sqrDist < nearestTargetSqrDist)
+                if (weaponData.targetIsOwnTeam && target.Team == team ||
+                    !weaponData.targetIsOwnTeam && target.Team != team)
                 {
-                    nearestTargetSqrDist = sqrDist;
-                    nearestTarget = ai;
+                    float sqrDist = Vector2.SqrMagnitude(transform.position - target.transform.position);
+                    if (sqrDist < nearestTargetSqrDist)
+                    {
+                        nearestTargetSqrDist = sqrDist;
+                        nearestTarget = target;
+                    }
                 }
             }
         }

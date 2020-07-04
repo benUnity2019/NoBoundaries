@@ -10,8 +10,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Tower towerPrefab;
     [SerializeField] UICounter money;
 
+    //Placeholder
+    [SerializeField] AIController aiPrefab;
+
     Vector2 move = Vector2.zero;
     Vector2 aim = Vector2.zero;
+
+    [SerializeField] Weapon[] towers;
+    [SerializeField, ReadOnly] int currentTower = 0;
 
     private void Awake()
     {
@@ -20,16 +26,39 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        //Placeholder
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            AIController newAI = Instantiate(aiPrefab);
+            newAI.transform.position = new Vector3(0.0f, 1.0f, 0.0f);
+        }
+
         if (Input.GetButtonDown("PlaceTower"))
         {
             Tower newTower = Instantiate(towerPrefab);
-            newTower.transform.position = transform.position;
-            newTower.Init(gameObject);
+            newTower.transform.position = characterController.InteractPosition;
+            newTower.Init(gameObject, towers[currentTower]);
         }
 
         if (Input.GetAxis("Attack") > 0.2f)
         {
             characterController.UseWeapon();
+        }
+
+        int towerScroll = (Input.GetButtonDown("TowerScrollRight") ? 1 : 0) - (Input.GetButtonDown("TowerScrollLeft") ? 1 : 0);
+        currentTower += towerScroll;
+        if (currentTower > 0)
+            currentTower %= towers.Length;
+        else if (currentTower < 0)
+            currentTower = towers.Length - (-currentTower % towers.Length);
+
+        for (int i = 0; i < towers.Length; ++i)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                currentTower = i;
+                break;
+            }
         }
     }
 

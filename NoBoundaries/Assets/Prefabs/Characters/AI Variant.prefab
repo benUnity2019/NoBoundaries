@@ -96,6 +96,11 @@ PrefabInstance:
       propertyPath: team
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6537443775701408813, guid: 9e7299b19d0769e4ab766fced00bf10b,
+        type: 3}
+      propertyPath: maxSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6537443775701408815, guid: 9e7299b19d0769e4ab766fced00bf10b,
         type: 3}
       propertyPath: m_Sprite
