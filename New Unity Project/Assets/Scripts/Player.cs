@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 1f;
+    public float speed = 1f;                                //Dud Script
+    public GameObject Player1;
 
+     void Start()
+    {
+
+    }
     void Update()
     {
         Vector3 pos = transform.position;
@@ -29,5 +34,25 @@ public class Player : MonoBehaviour
 
 
         transform.position = pos;
+      
     }
-}
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.name.Contains("TopDoor"))
+            Destroy(collision.gameObject);
+        if (collision.gameObject.name.Contains("RightDoor"))
+            Destroy(collision.gameObject);
+
+        if (collision.gameObject.tag == "Enemy")
+            Destroy(collision.gameObject);
+
+
+       
+    }
+      
+
+
+
+    }
+

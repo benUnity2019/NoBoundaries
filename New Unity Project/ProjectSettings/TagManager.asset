@@ -13,6 +13,14 @@ TagManager:
   - Top
   - Left
   - Right
+  - DeadEnd
+  - BR
+  - R
+  - DeadEndmaker
+  - Colliders
+  - BottomRoom
+  - CL
+  - Floor
   layers:
   - Default
   - TransparentFX
@@ -27,20 +35,20 @@ TagManager:
   - Enemy
   - Destroyer
   - Door
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - EntryRoom
+  - Walls
+  - R
+  - B
+  - T
+  - TopDoor
+  - RightDoor
+  - TR
+  - EntryRoomRightDoor
+  - EntryRoomTopDoor
+  - DeadEnd
+  - Floor
+  - BottomDeadEnd
+  - LeftDeadEnd
   - 
   - 
   - 
