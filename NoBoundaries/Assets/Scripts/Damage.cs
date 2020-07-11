@@ -83,6 +83,12 @@ public class Damage : MonoBehaviour
             HandleCollision(health);
     }
 
+    //private void OnDisable()
+    //{
+    //    lastDamageTimes.Clear();
+    //    currentObjsInMe.Clear();
+    //}
+
     void HandleCollision(HealthComponent health)
     {
         if (AddObjectToObjList(health))
