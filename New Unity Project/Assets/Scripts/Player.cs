@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log(collision.gameObject);
         if (collision.gameObject.name.Contains("TopDoor"))
             Destroy(collision.gameObject);
         if (collision.gameObject.name.Contains("RightDoor"))
@@ -47,12 +48,11 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
             Destroy(collision.gameObject);
 
-
        
     }
-      
+   
 
 
 
-    }
+}
 

@@ -110,13 +110,7 @@ public class WaveSpawner : MonoBehaviour
      IEnumerator WaitForMap()                       // Simple wait time for Start function
     {
         yield return new WaitForSeconds(10f);
-        /*
-        for (int i = 0; i <= spawnpoints.Length; i++)
-        {
-            spawnpoints[i].SetActive(false);
-
-        }
-        */
+        
     }
 
 

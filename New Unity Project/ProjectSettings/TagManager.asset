@@ -21,6 +21,7 @@ TagManager:
   - BottomRoom
   - CL
   - Floor
+  - Room
   layers:
   - Default
   - TransparentFX
@@ -37,20 +38,20 @@ TagManager:
   - Door
   - EntryRoom
   - Walls
-  - R
-  - B
-  - T
+  - 
+  - 
+  - 
   - TopDoor
   - RightDoor
-  - TR
-  - EntryRoomRightDoor
-  - EntryRoomTopDoor
+  - 
+  - 
+  - 
   - DeadEnd
   - Floor
   - BottomDeadEnd
   - LeftDeadEnd
-  - 
-  - 
+  - Room
+  - RoomDespawner
   - 
   - 
   - 
